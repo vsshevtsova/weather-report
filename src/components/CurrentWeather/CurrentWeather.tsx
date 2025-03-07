@@ -1,11 +1,26 @@
-import { WeatherData } from "../../services/api";
+import { FC } from "react";
 
-export const CurrentWeather: React.FC<{ data: WeatherData }> = ({ data }) => {
+
+export interface CurrentWeatherProps {
+  city: string,
+  temperature: number,
+  description: string
+}
+
+
+export const CurrentWeather: FC<CurrentWeatherProps> = (props) => {
+
+  const {
+    city,
+    description,
+    temperature
+  } = props
+
   return (
-    <div>
-      <h3>{data.city}</h3>
-      <h2>{data.temperature}</h2>
-      <p>{data.description}</p>
-    </div>
+    <>
+      <h3>{city}</h3>
+      <h2>{temperature}</h2>
+      <p>{description}</p>
+    </>
   );
 };

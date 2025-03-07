@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useUnit } from "effector-react";
-import { $weather, $location, $forecast, requestLocation } from "./model";
-import { fetchWeatherByCity, fetchForecast } from "../../services/api";
+import { $weather, $location, $forecast, requestLocation, fetchForecast, fetchWeatherByCity } from "./model";
 import { Search } from "../../components/Search/Search";
 import { CurrentWeather } from "../../components/CurrentWeather/CurrentWeather";
 import { Forecast } from "../../components/Forecast/Forecast";
@@ -18,15 +17,25 @@ export const WeatherView: React.FC = () => {
   }, [locationData]);
 
   const handleSearchSubmit = (city: string) => {
-    fetchWeatherByCity({ city });
-    fetchForecast({ city });
+    fetchWeatherByCity({city});
+    fetchForecast({city});
   };
 
   return (
     <div>
-      <Search onSubmit={handleSearchSubmit} />
-      {weatherData ? <CurrentWeather data={weatherData} /> : <p>Загрузка...</p>}
-      {forecastData ? <Forecast data={forecastData} /> : <p>Загрузка...</p>}
+      <Search onSubmit={ handleSearchSubmit } />
+      {
+        weatherData ?
+          <CurrentWeather
+            city={ weatherData.city }
+            description={ weatherData.description }
+            temperature={ weatherData.temperature }
+          /> : <p>Загрузка...</p>
+      }
+      { forecastData ?
+        <Forecast
+          days={forecastData}
+        /> : <p>Загрузка...</p> }
     </div>
   );
 };

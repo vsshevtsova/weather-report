@@ -1,12 +1,52 @@
 import { createStore, createEvent } from "effector";
-import {
-  fetchWeatherByCityFx,
-  fetchWeatherByCoordsFx,
-  fetchForecastFx,
-  WeatherData,
-  ForecastData,
-  Coords,
-} from "../../services/api";
+import { fetchForecastFx, fetchWeatherByCityFx, fetchWeatherByCoordsFx } from "../../services";
+import { Coords, ForecastData, WeatherData } from "../../services/types.ts";
+
+
+
+
+export const fetchWeatherByCity = createEvent<{ city: string }>();
+export const fetchWeatherByCoords = createEvent<{ lat: number; lon: number }>();
+
+// TODO: объединить fetchWeatherByCity и fetchWeatherByCoords в одну функцию, которая принимала бы либо те переменные либо другие, повторить с forecast
+
+export const fetchForecast = createEvent<{ city: string }>();
+
+
+
+fetchWeatherByCity.watch(({ city }) => {
+  fetchWeatherByCityFx({ city });
+});
+
+fetchWeatherByCoords.watch(({ lat, lon }) => {
+  fetchWeatherByCoordsFx({ lat, lon });
+});
+
+fetchForecast.watch(({ city }) => {
+  fetchForecastFx({ city });
+});
+
+fetchWeatherByCoordsFx.fail.watch((error) => {
+  console.log("Ошибка в fetchWeatherByCoords", error);
+});
+
+fetchWeatherByCoordsFx.fail.watch((error) => {
+  console.log("Ошибка в fetchWeatherByCoords", error);
+});
+
+fetchForecastFx.fail.watch((error) => {
+  console.log("Ошибка в fetchForecast", error);
+});
+
+fetchWeatherByCityFx.doneData.watch((data) => {
+  console.log("Погода получена", data);
+});
+
+fetchForecastFx.doneData.watch((data) => {
+  console.log("Прогноз получен", data);
+});
+
+
 
 export const setLocation = createEvent<Coords>();
 export const requestLocation = createEvent();

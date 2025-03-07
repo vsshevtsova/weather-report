@@ -1,11 +1,28 @@
-import { ForecastData } from "../../services/api";
+import { CurrentWeatherProps } from "../CurrentWeather/CurrentWeather.tsx";
+import { FC } from "react";
 
-export const Forecast: React.FC<{ data: ForecastData }> = ({ data }) => {
+
+interface Day extends Omit<CurrentWeatherProps, 'city'> {
+  date: string
+}
+
+interface ForecastProps {
+  days: Day[]
+}
+
+
+export const Forecast: FC<ForecastProps> = (props) => {
   return (
-    <div>
-      <h3>{data.date}</h3>
-      <h2>{data.temperature}</h2>
-      <p>{data.description}</p>
-    </div>
+    <>
+      {
+        props.days.map(day =>
+          <div>
+            <h3>{day.date}</h3>
+            <h2>{day.temperature}</h2>
+            <p>{day.description}</p>
+          </div>
+        )
+      }
+    </>
   );
 };
