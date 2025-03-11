@@ -1,29 +1,38 @@
 import { createStore, createEvent } from "effector";
-import { fetchForecastFx, fetchWeatherByCityFx, fetchWeatherByCoordsFx } from "../../services";
+import {
+  fetchForecastFx,
+  fetchWeatherByCityFx,
+  fetchWeatherByCoordsFx,
+} from "../../services";
 import { Coords, ForecastData, WeatherData } from "../../services/types.ts";
-
-
-
-
-export const fetchWeatherByCity = createEvent<{ city: string }>();
-export const fetchWeatherByCoords = createEvent<{ lat: number; lon: number }>();
 
 // TODO: объединить fetchWeatherByCity и fetchWeatherByCoords в одну функцию, которая принимала бы либо те переменные либо другие, повторить с forecast
 
-export const fetchForecast = createEvent<{ city: string }>();
+export const fetchWeather = createEvent<{
+  city?: string;
+  lat?: number;
+  lon?: number;
+}>();
+export const fetchForecast = createEvent<{
+  city?: string;
+  lat?: number;
+  lon?: number;
+}>();
 
-
-
-fetchWeatherByCity.watch(({ city }) => {
-  fetchWeatherByCityFx({ city });
+fetchWeather.watch(({ city, lat, lon }) => {
+  if (city) {
+    fetchWeatherByCityFx({ city });
+  } else if (lat && lon) {
+    fetchWeatherByCoordsFx({ lat, lon });
+  }
 });
 
-fetchWeatherByCoords.watch(({ lat, lon }) => {
-  fetchWeatherByCoordsFx({ lat, lon });
-});
-
-fetchForecast.watch(({ city }) => {
-  fetchForecastFx({ city });
+fetchForecast.watch(({ city, lat, lon }) => {
+  if (city) {
+    fetchForecastFx({ city });
+  } else if (lat && lon) {
+    fetchForecastFx({ lat, lon });
+  }
 });
 
 fetchWeatherByCoordsFx.fail.watch((error) => {
@@ -45,8 +54,6 @@ fetchWeatherByCityFx.doneData.watch((data) => {
 fetchForecastFx.doneData.watch((data) => {
   console.log("Прогноз получен", data);
 });
-
-
 
 export const setLocation = createEvent<Coords>();
 export const requestLocation = createEvent();
@@ -71,7 +78,8 @@ requestLocation.watch(() => {
         lon: position.coords.longitude,
       };
       setLocation(coords);
-      fetchWeatherByCoordsFx(coords);
+      fetchWeather(coords);
+      fetchForecast(coords);
     },
     (error) => {
       console.error("Ошибка получения координат:", error);

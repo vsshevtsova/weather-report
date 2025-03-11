@@ -1,0 +1,26 @@
+.card-container {
+  height: 100%;
+  .card {
+    padding: 20px;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--white);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+
+    .date {
+      grid-column: span 1;
+    }
+
+    .temperature {
+      grid-column: 2;
+      text-align: right;
+    }
+
+    .description {
+      grid-column: span 2;
+      text-align: right;
+    }
+  }
+}

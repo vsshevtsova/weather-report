@@ -1,0 +1,17 @@
+@use "color-config";
+@use "fonts";
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+  width: clamp(320px, 80vw, 1200px);
+  margin: 0 auto;
+  height: 100vh;
+}

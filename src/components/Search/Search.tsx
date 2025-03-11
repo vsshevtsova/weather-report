@@ -1,33 +1,42 @@
-import { useState } from "react";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import "./Search.scss";
 
 interface FormProps {
   onSubmit: (city: string) => void;
 }
 
-// TODO: вынести логику submit в пропс, убрать форму, оставить только инпут и кнопку, убрать стейт
+interface SearchProps extends FormProps {
+  className?: string;
+}
 
-export const Search: React.FC<FormProps> = ({onSubmit}) => {
-  const [city, setCity] = useState<string>("");
+export const Search: React.FC<SearchProps> = ({ onSubmit }) => {
+  let city = "";
 
-  function handleSubmit () {
+  function handleSubmit() {
     if (city.trim()) {
       onSubmit(city);
     }
   }
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+    }
+  };
 
-  function handleInputChange (event: React.ChangeEvent<HTMLInputElement>) {
-    setCity(event.target.value);
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    city = event.target.value;
   }
 
   return (
-    <div>
-      <input
+    <div className="search-item">
+      <Form.Control
         type="text"
-        value={ city }
-        onChange={ handleInputChange }
+        onChange={handleInputChange}
+        onKeyUp={handleKeyPress}
         placeholder="Введите город..."
       />
-      <button onClick={ handleSubmit }>Поиск</button>
+      <Button onClick={handleSubmit}>Поиск</Button>
     </div>
   );
 };

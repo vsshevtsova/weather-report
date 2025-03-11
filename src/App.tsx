@@ -1,9 +1,11 @@
 import { WeatherView } from "./view/WeatherView/WeatherView";
-import "./App.css";
+import "./assets/app.scss";
 
 function App() {
   return (
+    <div className="container">
       <WeatherView />
+    </div>
   );
 }
 
